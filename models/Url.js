@@ -12,6 +12,10 @@ const urlSchema = new mongoose.Schema(
     shortUrl: {
       type: String,
     },
+    slug:{
+      type: String,
+      required: [true, "Please provide a slug."],
+    },
     visits : [ 
       {
         date: {type:String }, 

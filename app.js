@@ -28,9 +28,9 @@ app.use(cors());
 app.use(xss());
 
 //routes
-app.get('/', (req,res)=>{
-    res.status(200).send('<h1>URL Shortening</h1>')
-})
+app.get("/", (req, res) => {
+  res.status(200).send("<h1 style='color:lightgreen; text-align:center;'>URL Shortening</h1>");
+});
 app.use("/", mainRouter);
 app.use("/api/url", urlRouter);
 
