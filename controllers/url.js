@@ -21,7 +21,7 @@ const shortenUrl = async (req, res) => {
           .status(StatusCodes.OK)
           .json({ msg: getReasonPhrase(StatusCodes.OK), url });
       } else {
-        if(slug){
+        if (slug) {
           //create urlCode
           const urlCode = shortId.generate();
           const shortUrl = baseUrl + "/" + urlCode;
@@ -36,11 +36,14 @@ const shortenUrl = async (req, res) => {
           res
             .status(StatusCodes.CREATED)
             .json({ msg: getReasonPhrase(StatusCodes.CREATED), url });
-        }
-        else{
+        } else {
           res
             .status(StatusCodes.BAD_REQUEST)
-            .json({ msg: getReasonPhrase(StatusCodes.BAD_REQUEST) + " Please provide slug." });
+            .json({
+              msg:
+                getReasonPhrase(StatusCodes.BAD_REQUEST) +
+                " Please provide slug.",
+            });
         }
       }
     } else {
@@ -51,39 +54,69 @@ const shortenUrl = async (req, res) => {
     }
   } catch (err) {
     //console.log(err);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({
-        msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
-      });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
+    });
   }
 };
 
-const searchUrl = async (req, res) => {
+const searchUrls = async (req, res) => {
   const { query } = req.query;
-  if(query){
+  if (query) {
     try {
-      const urls = await Url.find({slug : { $regex: query, $options: "i" }});
+      const urls = await Url.find({ slug: { $regex: query, $options: "i" } });
       if (urls) {
         res
           .status(StatusCodes.OK)
-          .json({ msg: getReasonPhrase(StatusCodes.OK),length:urls.length, urls });
+          .json({
+            msg: getReasonPhrase(StatusCodes.OK),
+            length: urls.length,
+            urls,
+          });
       } else {
         res
           .status(StatusCodes.NOT_FOUND)
-          .json({ msg: getReasonPhrase(StatusCodes.NOT_FOUND) + ` No URL with ${query} as slug found!` });
+          .json({
+            msg:
+              getReasonPhrase(StatusCodes.NOT_FOUND) +
+              ` No URL with ${query} as slug found!`,
+          });
       }
     } catch (err) {
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({
-          msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
-        });
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
+      });
     }
   }
 };
 
+const getOneUrl = async (req, res) => {
+  const { code } = req.params;
+  if (code) {
+    try {
+      const url = await Url.findOne({ urlCode :code });
+      if (url) {
+        res
+          .status(StatusCodes.OK)
+          .json({ msg: getReasonPhrase(StatusCodes.OK), url });
+      } else {
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({
+            msg:
+              ` No URL with ${code} as URL code found!`,
+          });
+      }
+    } catch (err) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
+      });
+    }
+}
+}
+
 module.exports = {
   shortenUrl,
-  searchUrl,
+  searchUrls,
+  getOneUrl,
 };
