@@ -20,6 +20,7 @@ const urlSchema = new mongoose.Schema(
       {
         date: {type:String }, 
         count: {type:Number},
+        ip: {type:String},
       }
   ],
   },

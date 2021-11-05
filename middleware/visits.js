@@ -1,6 +1,6 @@
 const Url = require("../models/Url");
 
-const visitsCounter = async (code) => {
+const visitsCounter = async (code,ip) => {
   try {
     const date = new Date().toISOString();
     const url = await Url.findOneAndUpdate(
@@ -10,6 +10,7 @@ const visitsCounter = async (code) => {
           visits: {
             date: date,
             count: 1,
+            ip: ip,
           },
         },
       }

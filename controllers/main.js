@@ -8,7 +8,7 @@ const redirectUrl = async  (req, res) => {
   try {
     const url = await Url.findOne({ urlCode: req.params.code });
     if (url) {
-        visitsCounter(req.params.code)
+        visitsCounter(req.params.code,req.ip);
       return res.redirect(url.longUrl);
     } else {
       return res.status(StatusCodes.NOT_FOUND).json({
