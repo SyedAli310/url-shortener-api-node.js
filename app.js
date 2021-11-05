@@ -30,6 +30,7 @@ app.use(xss());
 //routes
 app.get("/", (req, res) => {
   res.status(200).send("<h1 style='color:lightgreen; text-align:center;'>URL Shortening</h1><br><p style='text-align:center;'>Visit the official app to use the service <a href='https://fexy.netlify.app'>Here</a></p>");
+  res.redirect("https://fexy.netlify.app");
 });
 app.use("/", mainRouter);
 app.use("/api/url", urlRouter);
