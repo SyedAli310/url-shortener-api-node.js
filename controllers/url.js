@@ -5,7 +5,6 @@ const shortId = require("shortid");
 const { StatusCodes, getReasonPhrase } = require("http-status-codes");
 const { generateSlug } = require("random-word-slugs");
 
-
 const shortenUrl = async (req, res) => {
   const { longUrl } = req.body;
   let { slug } = req.body;
@@ -26,7 +25,7 @@ const shortenUrl = async (req, res) => {
       } else {
         if (slug) {
           slug = slug.trim();
-          slug = slug.replace(/\s/g, '')
+          slug = slug.replace(/\s/g, "");
           console.log(slug);
           let checkSlug = await Url.findOne({ slug });
           if (checkSlug) {
@@ -58,10 +57,10 @@ const shortenUrl = async (req, res) => {
           //create URL with urlCode
           const urlCode = shortId.generate();
           const shortUrl = baseUrl + "/" + urlCode;
-          const defaultSlug = generateSlug(2,{
+          const defaultSlug = generateSlug(2, {
             format: "kebab",
             categories: {
-              noun: ["technology"]
+              noun: ["technology"],
             },
           });
           url = new Url({
@@ -140,21 +139,25 @@ const getOneUrl = async (req, res) => {
 };
 
 const getAllUrls = async (req, res) => {
-    try {
-      const urls = await Url.find();
-      if (urls) {
-        res
-          .status(StatusCodes.OK)
-          .json({ msg: getReasonPhrase(StatusCodes.OK),totalUrls:urls.length, urls });
-      } else {
-        res.status(StatusCodes.NOT_FOUND).json({
-          msg: ` No URL's found`,
+  try {
+    const urls = await Url.find();
+    if (urls) {
+      res
+        .status(StatusCodes.OK)
+        .json({
+          msg: getReasonPhrase(StatusCodes.OK),
+          totalUrls: urls.length,
+          urls,
         });
-      }
-    } catch (err) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json({
+        msg: ` No URL's found`,
       });
+    }
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
+    });
   }
 };
 

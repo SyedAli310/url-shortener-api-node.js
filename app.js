@@ -6,7 +6,6 @@ const cors = require("cors");
 const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 
-
 const express = require("express");
 const app = express();
 //connectDB
