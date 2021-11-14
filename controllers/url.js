@@ -3,7 +3,8 @@ const Url = require("../models/Url");
 const validUrl = require("valid-url");
 const shortId = require("shortid");
 const { StatusCodes, getReasonPhrase } = require("http-status-codes");
-const getUrlTitle = require("get-url-title")
+const { generateSlug } = require("random-word-slugs");
+
 
 const shortenUrl = async (req, res) => {
   const { longUrl } = req.body;
@@ -57,7 +58,12 @@ const shortenUrl = async (req, res) => {
           //create URL with urlCode
           const urlCode = shortId.generate();
           const shortUrl = baseUrl + "/" + urlCode;
-          const defaultSlug = await getUrlTitle(longUrl);
+          const defaultSlug = generateSlug(2,{
+            format: "kebab",
+            categories: {
+              noun: ["technology"]
+            },
+          });
           url = new Url({
             longUrl,
             shortUrl,
@@ -133,8 +139,28 @@ const getOneUrl = async (req, res) => {
   }
 };
 
+const getAllUrls = async (req, res) => {
+    try {
+      const urls = await Url.find();
+      if (urls) {
+        res
+          .status(StatusCodes.OK)
+          .json({ msg: getReasonPhrase(StatusCodes.OK),totalUrls:urls.length, urls });
+      } else {
+        res.status(StatusCodes.NOT_FOUND).json({
+          msg: ` No URL's found`,
+        });
+      }
+    } catch (err) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        msg: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) + err.message,
+      });
+  }
+};
+
 module.exports = {
   shortenUrl,
   searchUrls,
   getOneUrl,
+  getAllUrls,
 };
