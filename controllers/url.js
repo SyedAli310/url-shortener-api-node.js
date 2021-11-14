@@ -26,7 +26,7 @@ const shortenUrl = async (req, res) => {
       } else {
         if (slug) {
           slug = slug.trim();
-          slug = slug.replace(' ','')
+          slug = slug.replace(/\s/g, '')
           console.log(slug);
           let checkSlug = await Url.findOne({ slug });
           if (checkSlug) {
