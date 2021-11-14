@@ -4,13 +4,20 @@ const { StatusCodes, getReasonPhrase } = require("http-status-codes");
 //middleware
 const visitsCounter = require("../middleware/visits");
 
-const redirectUrl = async  (req, res) => {
+const redirectUrl = async (req, res) => {
   try {
-    const url = await Url.findOne({ urlCode: req.params.code });
+    let { code } = req.params;
+    const url = await Url.findOne({ urlCode: code });
+    const SlugUrl = await Url.findOne({ slug: code});
     if (url) {
-        visitsCounter(req.params.code,req.ip);
+      visitsCounter(req.params.code, req.ip);
       return res.redirect(url.longUrl);
-    } else {
+    }
+    else if (SlugUrl) {
+      visitsCounter(SlugUrl.urlCode, req.ip);
+      return res.redirect(SlugUrl.longUrl);
+    } 
+    else {
       return res.status(StatusCodes.NOT_FOUND).json({
         msg: getReasonPhrase(StatusCodes.NOT_FOUND) + " No URL found!",
       });
@@ -23,8 +30,6 @@ const redirectUrl = async  (req, res) => {
     });
   }
 };
-
-
 
 module.exports = {
   redirectUrl,
