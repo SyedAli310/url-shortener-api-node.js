@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
   res
     .status(200)
     .send(
-      "<h1 style='color:lightgreen; text-align:center;'>URL Shortening</h1><br><p style='text-align:center;'>Visit the official app to use the service <a href='https://fexy.tech/shorten' target='_blank'>Here</a></p>"
+      "<h1 style='color:lightgreen; text-align:center;'>URL Shortening</h1><br><p style='text-align:center;'>Visit the official app to use the service <a href='https://fexy.vercel.app/shorten.html' target='_blank'>Here</a></p>"
     );
 });
 app.use("/", mainRouter);
