@@ -21,7 +21,7 @@ const shortenUrl = async (req, res) => {
       if (url) {
         res
           .status(StatusCodes.OK)
-          .json({ msg: getReasonPhrase(StatusCodes.OK), url: {...url, shortUrl: baseUrl + "/" + url.slug || url.urlCode} });
+          .json({ msg: getReasonPhrase(StatusCodes.OK), url: {...url._doc, shortUrl: baseUrl + "/" + url.slug || url.urlCode} });
       } else {
         if (slug) {
           slug = slug.trim();
@@ -124,7 +124,7 @@ const getOneUrl = async (req, res) => {
       if (url) {
         res
           .status(StatusCodes.OK)
-          .json({ msg: getReasonPhrase(StatusCodes.OK), url: {...url, shortUrl: baseUrl + "/" + url.slug || url.urlCode} });
+          .json({ msg: getReasonPhrase(StatusCodes.OK), url: {...url._doc, shortUrl: baseUrl + "/" + url.slug || url.urlCode} });
       } else {
         res.status(StatusCodes.NOT_FOUND).json({
           msg: ` No URL with ${code} as URL code found!`,
