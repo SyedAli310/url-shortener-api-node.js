@@ -120,11 +120,12 @@ const getOneUrl = async (req, res) => {
   const { code } = req.params;
   if (code) {
     try {
+      const baseUrl = process.env.BASE_URL;
       const url = await Url.findOne({ urlCode: code });
       if (url) {
         res
           .status(StatusCodes.OK)
-          .json({ msg: getReasonPhrase(StatusCodes.OK), url });
+          .json({ msg: getReasonPhrase(StatusCodes.OK), url: {...url, shortUrl: baseUrl + "/" + url.slug || url.urlCode} });
       } else {
         res.status(StatusCodes.NOT_FOUND).json({
           msg: ` No URL with ${code} as URL code found!`,
