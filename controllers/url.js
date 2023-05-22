@@ -21,12 +21,11 @@ const shortenUrl = async (req, res) => {
       if (url) {
         res
           .status(StatusCodes.OK)
-          .json({ msg: getReasonPhrase(StatusCodes.OK), url });
+          .json({ msg: getReasonPhrase(StatusCodes.OK), url: {...url, shortUrl: baseUrl + "/" + url.slug || url.urlCode} });
       } else {
         if (slug) {
           slug = slug.trim();
           slug = slug.replace(/\s/g, "");
-          console.log(slug);
           let checkSlug = await Url.findOne({ slug });
           if (checkSlug) {
             //send error
