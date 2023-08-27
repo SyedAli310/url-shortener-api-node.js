@@ -147,11 +147,12 @@ const getAllUrls = async (req, res) => {
         .json({
           msg: getReasonPhrase(StatusCodes.OK),
           totalUrls: urls.length,
-          urls,
+          // urls, [no need to send all urls]
         });
     } else {
       res.status(StatusCodes.NOT_FOUND).json({
         msg: ` No URL's found`,
+        totalUrls: 0,
       });
     }
   } catch (err) {

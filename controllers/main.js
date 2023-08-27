@@ -10,11 +10,11 @@ const redirectUrl = async (req, res) => {
     const url = await Url.findOne({ urlCode: code });
     const SlugUrl = await Url.findOne({ slug: code});
     if (url) {
-      visitsCounter(req.params.code, req.ip);
+      visitsCounter(req.params.code, req.socket.remoteAddress);
       return res.redirect(url.longUrl);
     }
     else if (SlugUrl) {
-      visitsCounter(SlugUrl.urlCode, req.ip);
+      visitsCounter(SlugUrl.urlCode, req.socket.remoteAddress);
       return res.redirect(SlugUrl.longUrl);
     } 
     else {

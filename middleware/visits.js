@@ -1,4 +1,5 @@
 const Url = require("../models/Url");
+const geoIp = require('geoip-lite');
 
 const visitsCounter = async (code,ip) => {
   try {
@@ -11,6 +12,7 @@ const visitsCounter = async (code,ip) => {
             date: date,
             count: 1,
             ip: ip,
+            region: ip === '::1' ? "NA" : geoIp.lookup(ip),
           },
         },
       }
